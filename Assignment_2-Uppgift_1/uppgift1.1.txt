@@ -44,7 +44,7 @@ House
 ------------------------------------------
 -int yearBuilt
 -int size
--final int minSize = 10;
+-final int minSize
 ------------------------------------------
 +House(int yearBuilt,int size)
 +int getYearBuilt()
