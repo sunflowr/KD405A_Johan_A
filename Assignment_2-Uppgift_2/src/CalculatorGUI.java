@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JLabel;
 
 public class CalculatorGUI extends JFrame {
 	
@@ -18,8 +22,6 @@ public class CalculatorGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtDisplay;
 	private JButton btnClear;
-	private JButton btnProcent;
-	private JButton btnInvert;
 	private JButton btnDivide;
 	private JButton btn8;
 	private JButton btn7;
@@ -36,6 +38,15 @@ public class CalculatorGUI extends JFrame {
 	private JButton btn0;
 	private JButton btnDecimal;
 	private JButton btnSum;
+	private JPanel pnlButtonRow1;
+	private JPanel pnlButtonRow2;
+	private JPanel pnlButtonRow3;
+	private JPanel pnlButtonRow4;
+	private JPanel pnlButtonRow5;
+	private JPanel pnlRow5Col1;
+	private JPanel pnlRow5Col2;
+	private JPanel pnlRow1Col2;
+	private JPanel pnlRow1Col1;
 
 	/**
 	 * Launch the application.
@@ -71,43 +82,52 @@ public class CalculatorGUI extends JFrame {
 		txtDisplay.setEditable(false);
 		contentPane.add(txtDisplay, BorderLayout.NORTH);
 		txtDisplay.setColumns(10);
+
+		// Set initial value of calculator.
+		txtDisplay.setText(String.valueOf(calculator.getResult()));
 		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new GridLayout(5, 4, 2, 2));
+		JPanel pnlButtons = new JPanel();
+		contentPane.add(pnlButtons, BorderLayout.CENTER);
+		pnlButtons.setLayout(new GridLayout(5, 4, 2, 2));
+		
+		pnlButtonRow1 = new JPanel();
+		pnlButtons.add(pnlButtonRow1);
+		pnlButtonRow1.setLayout(new GridLayout(0, 2, 2, 0));
+		
+		pnlRow1Col1 = new JPanel();
+		pnlButtonRow1.add(pnlRow1Col1);
+		pnlRow1Col1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		btnClear = new JButton("C");
+		pnlRow1Col1.add(btnClear);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clear();
 				txtDisplay.setText(String.valueOf(calculator.getResult()));
 			}
 		});
-		panel.add(btnClear);
 		
-		btnInvert = new JButton("+/-");
-		btnInvert.addActionListener(new ActionListener() {
+		pnlRow1Col2 = new JPanel();
+		pnlButtonRow1.add(pnlRow1Col2);
+		pnlRow1Col2.setLayout(new GridLayout(0, 1, 2, 2));
+		
+		btnSum = new JButton("=");
+		pnlRow1Col2.add(btnSum);
+		btnSum.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Sorry! Can't negate! Does not compute!!");
+				try {
+					calculator.equals();
+					txtDisplay.setText(String.valueOf(calculator.getResult()));
+				} catch(java.lang.ArithmeticException ex) {
+					calculator.clear();
+					txtDisplay.setText("Error: " + ex.getMessage());
+				}
 			}
 		});
-		panel.add(btnInvert);
 		
-		btnProcent = new JButton("%");
-		btnProcent.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Sorry! Can't procent! Does not compute!!");
-			}
-		});
-		panel.add(btnProcent);
-		
-		btnDivide = new JButton("/");
-		btnDivide.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Sorry! Can't divide! Does not compute!!");
-			}
-		});
-		panel.add(btnDivide);
+		pnlButtonRow2 = new JPanel();
+		pnlButtons.add(pnlButtonRow2);
+		pnlButtonRow2.setLayout(new GridLayout(0, 4, 0, 2));
 		
 		btn7 = new JButton("7");
 		btn7.addActionListener(new ActionListener() {
@@ -116,7 +136,7 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn7);
+		pnlButtonRow2.add(btn7);
 		
 		btn8 = new JButton("8");
 		btn8.addActionListener(new ActionListener() {
@@ -125,7 +145,7 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn8);
+		pnlButtonRow2.add(btn8);
 		
 		btn9 = new JButton("9");
 		btn9.addActionListener(new ActionListener() {
@@ -134,16 +154,20 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn9);
+		pnlButtonRow2.add(btn9);
 		
 		btnMultiply = new JButton("*");
+		pnlButtonRow2.add(btnMultiply);
 		btnMultiply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.mult();
 				txtDisplay.setText(String.valueOf(calculator.getResult()));
 			}
 		});
-		panel.add(btnMultiply);
+		
+		pnlButtonRow3 = new JPanel();
+		pnlButtons.add(pnlButtonRow3);
+		pnlButtonRow3.setLayout(new GridLayout(0, 4, 0, 0));
 		
 		btn4 = new JButton("4");
 		btn4.addActionListener(new ActionListener() {
@@ -152,7 +176,7 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn4);
+		pnlButtonRow3.add(btn4);
 		
 		btn5 = new JButton("5");
 		btn5.addActionListener(new ActionListener() {
@@ -161,7 +185,7 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn5);
+		pnlButtonRow3.add(btn5);
 		
 		btn6 = new JButton("6");
 		btn6.addActionListener(new ActionListener() {
@@ -170,16 +194,25 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn6);
+		pnlButtonRow3.add(btn6);
 		
-		btnMinus = new JButton("-");
-		btnMinus.addActionListener(new ActionListener() {
+		btnDivide = new JButton("/");
+		pnlButtonRow3.add(btnDivide);
+		btnDivide.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.minus();
-				txtDisplay.setText(String.valueOf(calculator.getResult()));
+				try {
+					calculator.div();
+					txtDisplay.setText(String.valueOf(calculator.getResult()));
+				} catch(java.lang.ArithmeticException ex) {
+					calculator.clear();
+					txtDisplay.setText("Error: " + ex.getMessage());
+				}
 			}
 		});
-		panel.add(btnMinus);
+		
+		pnlButtonRow4 = new JPanel();
+		pnlButtons.add(pnlButtonRow4);
+		pnlButtonRow4.setLayout(new GridLayout(0, 4, 0, 0));
 		
 		btn1 = new JButton("1");
 		btn1.addActionListener(new ActionListener() {
@@ -188,7 +221,7 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn1);
+		pnlButtonRow4.add(btn1);
 		
 		btn2 = new JButton("2");
 		btn2.addActionListener(new ActionListener() {
@@ -197,7 +230,7 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn2);
+		pnlButtonRow4.add(btn2);
 		
 		btn3 = new JButton("3");
 		btn3.addActionListener(new ActionListener() {
@@ -206,16 +239,24 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn3);
+		pnlButtonRow4.add(btn3);
 		
-		btnPlus = new JButton("+");
-		btnPlus.addActionListener(new ActionListener() {
+		btnMinus = new JButton("-");
+		pnlButtonRow4.add(btnMinus);
+		btnMinus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.plus();
+				calculator.minus();
 				txtDisplay.setText(String.valueOf(calculator.getResult()));
 			}
 		});
-		panel.add(btnPlus);
+		
+		pnlButtonRow5 = new JPanel();
+		pnlButtons.add(pnlButtonRow5);
+		pnlButtonRow5.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		pnlRow5Col1 = new JPanel();
+		pnlButtonRow5.add(pnlRow5Col1);
+		pnlRow5Col1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		btn0 = new JButton("0");
 		btn0.addActionListener(new ActionListener() {
@@ -224,25 +265,27 @@ public class CalculatorGUI extends JFrame {
 				txtDisplay.setText(String.valueOf(calculator.getOperand()));
 			}
 		});
-		panel.add(btn0);
+		pnlRow5Col1.add(btn0);
+		
+		pnlRow5Col2 = new JPanel();
+		pnlButtonRow5.add(pnlRow5Col2);
+		pnlRow5Col2.setLayout(new GridLayout(1, 2, 2, 2));
 		
 		btnDecimal = new JButton(",");
 		btnDecimal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Sorry! Can't decimal! Does not compute!!");
+				calculator.decimalButtonPressed();
 			}
 		});
-		panel.add(btnDecimal);
+		pnlRow5Col2.add(btnDecimal);
 		
-		btnSum = new JButton("=");
-		btnSum.addActionListener(new ActionListener() {
+		btnPlus = new JButton("+");
+		pnlRow5Col2.add(btnPlus);
+		btnPlus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.equals();
+				calculator.plus();
 				txtDisplay.setText(String.valueOf(calculator.getResult()));
 			}
 		});
-		panel.add(btnSum);
-
-		txtDisplay.setText(String.valueOf(calculator.getResult()));
 	}
 }
