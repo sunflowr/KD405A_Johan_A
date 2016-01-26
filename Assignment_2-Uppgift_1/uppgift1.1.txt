@@ -1,0 +1,54 @@
+public class House {
+	private int yearBuilt;
+	private int size;
+	private final int minSize = 10;
+
+	public House(int yearBuilt,int size){
+		//diverse kod
+	}
+
+	public int getYearBuilt(){
+		//diverse kod
+	}
+
+	public int getSize(){
+		//diverse kod
+	}
+}
+
+-------------------
+ SVAR
+-------------------
+a) Konstruktorn är:
+	public House(int yearBuilt,int size)
+
+b) Instansvariblerna är:
+	private int yearBuilt;
+	private int size;
+	private final int minSize = 10;
+
+c) Instansmetoderna är:
+	public int getYearBuilt()
+	public int getSize()
+
+d) En variabel som är deklrerad som final kan endast sättas en gång.
+Det sker vid deklarationen eller i konstruktorn. Tillskillnad från
+en konstant så behöver inte värdet vetas vid kompileringstillfället.
+
+e) De publika (public) kan andra ha tillgång till medans de
+privata (private) kan endast objektet själv komma åt.
+
+f)
+------------------------------------------
+House
+------------------------------------------
+-int yearBuilt
+-int size
+-final int minSize = 10;
+------------------------------------------
++House(int yearBuilt,int size)
++int getYearBuilt()
++int getSize()
+------------------------------------------
+
+g) Ok, lägger den där.
