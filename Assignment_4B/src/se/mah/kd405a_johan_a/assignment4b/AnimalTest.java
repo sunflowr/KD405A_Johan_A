@@ -37,7 +37,7 @@ public class AnimalTest extends JFrame {
 	 */
 	public AnimalTest() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 696, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new TitledBorder(null, "Animallist", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.setLayout(new BorderLayout(0, 0));
