@@ -93,6 +93,7 @@ public class HumanDogGUI extends JFrame {
 		JButton btnNewHuman = new JButton("New Human");
 		btnNewHuman.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Create a new human if the name is at least three characters long.
 				if(txtHumanName.getText().length() >= 3){
 					human = new Human(txtHumanName.getText());
 				} else {
@@ -119,6 +120,7 @@ public class HumanDogGUI extends JFrame {
 		JButton btnBuyDog = new JButton("Buy Dog");
 		btnBuyDog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Create a new dog and assign it to a human.
 				if(human != null) {
 					if(txtDogName.getText().length() >= 3){
 						human.buyDog(new Dog(txtDogName.getText()));
@@ -140,6 +142,7 @@ public class HumanDogGUI extends JFrame {
 		JButton btnPrintInfo = new JButton("Print Info");
 		btnPrintInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Outputs info about a human.
 				if(human != null) {
 					txtInfo.setText(human.getInfo());
 				} else {
