@@ -96,6 +96,12 @@ public class HumanDogGUI extends JFrame {
 				// Create a new human if the name is at least three characters long.
 				if(txtHumanName.getText().length() >= 3){
 					human = new Human(txtHumanName.getText());
+
+					// Print info.
+					txtInfo.setText("Created human " + human.getName() + ".");
+
+					// Clear error message.
+					txtErrorMessage.setText("");
 				} else {
 					txtErrorMessage.setText("Human name must be at least three characters long.");
 				}
@@ -123,7 +129,14 @@ public class HumanDogGUI extends JFrame {
 				// Create a new dog and assign it to a human.
 				if(human != null) {
 					if(txtDogName.getText().length() >= 3){
-						human.buyDog(new Dog(txtDogName.getText()));
+						Dog dog = new Dog(txtDogName.getText());
+						human.buyDog(dog);
+						
+						// Print info.
+						txtInfo.setText("Human " + human.getName() + " bought the dog " + dog.getName() + ".");
+
+						// Clear error message.
+						txtErrorMessage.setText("");
 					} else {
 						txtErrorMessage.setText("Dog name must be at least three characters long.");
 					}
@@ -145,6 +158,9 @@ public class HumanDogGUI extends JFrame {
 				// Outputs info about a human.
 				if(human != null) {
 					txtInfo.setText(human.getInfo());
+
+					// Clear error message.
+					txtErrorMessage.setText("");
 				} else {
 					txtErrorMessage.setText("No human available. Please make a new human before printing it's info.");
 				}
