@@ -64,7 +64,7 @@ public class AnimalTest extends JFrame {
 		animals.add(new Cat("Lynx pardinus", 5, 9));
 		animals.add(new Snake("Leiopython fredparken", false));
 		
-		// Ouput the info of the animals to the GUI.
+		// Output the info of the animals to the GUI.
 		txtAnimalList.setText("");
 		for(Animal animal : animals){
 			txtAnimalList.append(animal.getInfo() + "\n");
