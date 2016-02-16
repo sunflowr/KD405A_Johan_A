@@ -31,6 +31,8 @@ public class ClockLogic {
 				
 				if((hour == alarmHour) && (minute == alarmMinute)) {
 					clockGUI.activateAlarm(true);
+				} else {
+					clockGUI.activateAlarm(false);
 				}
 				
 				// Sleep for 900ms.
