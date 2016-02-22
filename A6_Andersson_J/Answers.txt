@@ -1,0 +1,26 @@
+Svar
+
+Fråga 1:
+Från "Malmö C" till "Lund C"
+
+Fråga 2:
+Du lägger till &NoOf=5 på slutet så här:
+http://www.labs.skanetrafiken.se/v2.2/resultspage.asp?cmdaction=next&selPointFr=0|80000|0&selPointTo=0|81216|0&NoOf=5
+
+Fråga 3:
+- <Journeys></Journeys> är en lista på hittade resor (<Journey></Journey>).
+- <Journey></Jouney> är en komplett resa och innehåller rutten (<RouteLinks></RouteLinks>).
+- <RouteLinks></RouteLinks> är en lista av delresor (<RouteLink></RouteLink>) som beskriver rutten.
+- <RouteLink></RouteLink> är en delresa och beskriver vilket resmedel, kostnad, avgång, amkomst osv för den delresan.
+
+Hierarki:
+Journeys (antal: 1)
+	Journey (antal: 1 ... *)
+		RouteLinks (antal: 1)
+			RouteLink (antal: 1 ... * )
+
+Fråga 4:
+<NoOfChanges> innehåller antal byten. Den är placerad under "huvudtaggen" <Journey>.
+
+Fråga 5:
+<DennaTaggFinnsInteIAPIetJagLaddadeNed></DennaTaggFinnsInteIAPIetJagLaddadeNed>
