@@ -14,10 +14,13 @@ import se.mah.k3lara.skaneAPI.xmlparser.Parser;
 public class TestClass {
 
 	public static void main(String[] args) {
-		String searchURL = Constants.getURL("80000","81216",20); //Malmö C = 80000,  Lund C, 81216 Malmö Gatorg 80100, Hässleholm C 93070
+		// Construct the query URL for searching from start destination "MalmÃ¶ C" (80000) to
+		// end destination "Lund C" (81216) and allowing 20 search results.
+		String searchURL = Constants.getURL("80000","81216",20); //Malmï¿½ C = 80000,  Lund C, 81216 Malmï¿½ Gatorg 80100, Hï¿½ssleholm C 93070
 		System.out.println(searchURL);
 		System.out.println("// Results when searching:");
 		
+		// Call the Skanetrafiken API with the constructed query URL to retrieve a list of available journeys.
 		Journeys journeys = Parser.getJourneys(searchURL);
 		for (Journey journey : journeys.getJourneys()) {
 			System.out.print(journey.getStartStation()+" - ");
@@ -27,13 +30,17 @@ public class TestClass {
 		} 
 		
 	   System.out.println("// Stations when searching for stations containing \"Malm\"");
+
+	   	// Create a list for holding Stations. 
 		ArrayList<Station> searchStations = new ArrayList<Station>(); 
+
+		// Search for all stations that contains the string "Malm" and add the to the list searchStations.
 		searchStations.addAll(Parser.getStationsFromURL("Malm"));
 		for (Station s: searchStations){
 			System.out.println(s.getStationName() +" number:" +s.getStationNbr());
 		}
 		
-		System.out.println("// Busses departing from Ubåtshallen stationsnummer 80046 ");
+		System.out.println("// Busses departing from Ubï¿½tshallen stationsnummer 80046 ");
 		Lines lines = Parser.getStationResults(new Station("80046"));
 		for (Line l : lines.getLines()) {
 			System.out.println("Line " + l.getLine() +" departs: "+l.getDepTime().get(Calendar.HOUR_OF_DAY)+":"+l.getDepTime().get(Calendar.MINUTE)+
