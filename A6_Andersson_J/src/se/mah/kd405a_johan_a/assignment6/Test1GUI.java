@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
@@ -36,7 +37,7 @@ public class Test1GUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtSearch;
-	private JTextArea txtrResult;
+	private JTextArea txtResult;
 	private JScrollPane scrollPane;
 	private JLabel lblNewLabel;
 	private JPanel panel_1;
@@ -51,6 +52,7 @@ public class Test1GUI extends JFrame {
 	private JScrollPane scrollPane_1;
 	private JLabel lblResultat;
 	private JTextArea txtJourneyResult;
+	private JLabel lblNamn;
 
 	/**
 	 * Launch the application.
@@ -91,36 +93,32 @@ public class Test1GUI extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		txtSearch = new JTextField();
-		txtSearch.setText("Söksträng");
+		txtSearch.setText("Malmö");
 		panel.add(txtSearch, BorderLayout.CENTER);
 		txtSearch.setColumns(10);
 		
 		JButton btnSearch = new JButton("Sök");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Clear result.
-				txtrResult.setText("");
+				// Tell the user we're searching.
+				txtResult.setText("Söker...");
 				
-			   	// Create a list for holding Stations. 
-				ArrayList<Station> searchStations = new ArrayList<Station>(); 
-
-				// Search for all stations that contains the value of txtSearch and add the to the list searchStations.
-				searchStations.addAll(Parser.getStationsFromURL(txtSearch.getText().trim()));
-				for (Station s: searchStations){
-					txtrResult.append(s.getStationName() +" number:" + s.getStationNbr() + 
-						" longitude: " + s.getLongitude() + " latitude: " + s.getLatitude() + "\n");
-				}
+				// Start search query thread.
+				new GetStationsThread().start();; 
 			}
 		});
 		panel.add(btnSearch, BorderLayout.EAST);
+		
+		lblNamn = new JLabel("Namn");
+		panel.add(lblNamn, BorderLayout.WEST);
 		
 		scrollPane = new JScrollPane();
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		scrollPane.setViewportBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
-		txtrResult = new JTextArea();
-		scrollPane.setViewportView(txtrResult);
-		txtrResult.setText("");
+		txtResult = new JTextArea();
+		scrollPane.setViewportView(txtResult);
+		txtResult.setText("");
 		
 		lblNewLabel = new JLabel("Resultat");
 		scrollPane.setColumnHeaderView(lblNewLabel);
@@ -137,6 +135,7 @@ public class Test1GUI extends JFrame {
 		panel_3.add(lblNewLabel_1, "cell 0 0,grow");
 		
 		txtJourneyFrom = new JTextField();
+		txtJourneyFrom.setText("80000");
 		panel_3.add(txtJourneyFrom, "cell 1 0,grow");
 		txtJourneyFrom.setColumns(10);
 		
@@ -144,65 +143,18 @@ public class Test1GUI extends JFrame {
 		panel_3.add(lblNewLabel_2, "cell 0 1,grow");
 		
 		txtJourneyTo = new JTextField();
+		txtJourneyTo.setText("81216");
 		panel_3.add(txtJourneyTo, "cell 1 1,grow");
 		txtJourneyTo.setColumns(10);
 		
 		btnJourneySearch = new JButton("Sök");
 		btnJourneySearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Clear result.
-				txtJourneyResult.setText("");
+				// Tell the user we're searching.
+				txtJourneyResult.setText("Söker...");
 				
-				// Create a list for holding Stations. 
-				ArrayList<Station> searchStations = new ArrayList<Station>();
-
-				// Find station numbers.
-				String fromNbr = "80000";
-				String toNbr = "81216";
-
-				// Search for all stations that contains the value of txtSearch and add the to the list searchStations.
-				searchStations.addAll(Parser.getStationsFromURL(txtJourneyFrom.getText().trim()));
-				for (Station s: searchStations){
-					// Find station number.
-				}
-
-				// Construct the query URL for searching.
-				String searchURL = Constants.getURL(fromNbr, toNbr, 1);
-
-				// Call the Skanetrafiken API with the constructed query URL to retrieve a list of available journeys.
-				Journeys journeys = Parser.getJourneys(searchURL);
-				ArrayList<Journey> journeyList = journeys.getJourneys();
-				if(!journeyList.isEmpty()) {
-					// Get fist journey and print out info about it.
-					Journey journey = journeyList.get(0);
-					txtJourneyResult.append("Resa:\n");
-					txtJourneyResult.append("------------------\n");
-					txtJourneyResult.append("Avgår kl. " + journey.getDepDateTime());
-					if(!journey.getArrTimeDeviation().isEmpty()) {
-						// If there's a deviation, display it too.
-						txtJourneyResult.append("(ny tid: " + journey.getDepTimeDeviation() + ")");
-					}
-					txtJourneyResult.append(" från " + journey.getStartStation() +  "\n");
-					txtJourneyResult.append("Ankommer kl. " + journey.getArrDateTime());
-					if(!journey.getArrTimeDeviation().isEmpty()) {
-						// If there's a deviation, display it too.
-						txtJourneyResult.append("(ny tid: " + journey.getArrTimeDeviation() + ")");
-					}
-					txtJourneyResult.append(" till " + journey.getEndStation() +  "\n");
-					txtJourneyResult.append("Restid: " + journey.getTravelMinutes() + "\n");
-					txtJourneyResult.append("Avgår om : " + journey.getTimeToDeparture() + " minuter(?)\n");
-					txtJourneyResult.append("Antal byten: " + journey.getNoOfChanges() + "\n");
-					txtJourneyResult.append("Antal byten: " + journey.getNoOfChanges() + "\n");
-					txtJourneyResult.append("Antal zoner: " + journey.getNoOfZones() +  "\n");
-				} else {
-					txtJourneyResult.append("Ingen resa funnen.\n");
-				}
-				for (Journey journey : journeys.getJourneys()) {
-					txtJourneyResult.append(journey.getStartStation().toString() + " - ");
-					txtJourneyResult.append(journey.getEndStation().toString());
-					String time = journey.getDepDateTime().get(Calendar.HOUR_OF_DAY) + ":" + journey.getDepDateTime().get(Calendar.MINUTE);
-					txtJourneyResult.append(" Departs " + time + " that is in " + journey.getTimeToDeparture() + " minutes. And it is " + journey.getDepTimeDeviation() + " min late\n");
-				} 
+				// Start search query thread.
+				new GetJourneysThread().start();; 
 			}
 		});
 		panel_3.add(btnJourneySearch, "cell 1 2,grow");
@@ -218,4 +170,109 @@ public class Test1GUI extends JFrame {
 		scrollPane_1.setViewportView(txtJourneyResult);
 	}
 
+	/**
+	 * Returns the HOUR and MINUTE part of the calendar argument as a string: "HH::mm"
+	 * @param time Calendar time to format.
+	 * @return Calendar formated as "HH:mm"
+	 */
+	String getCalenderAsHHmm(Calendar time) {
+		return time.get(Calendar.HOUR_OF_DAY) + ":" + time.get(Calendar.MINUTE);
+	}
+	
+	/**
+	 * Handles the search query for journeys. 
+	 */
+	private class GetJourneysThread extends Thread {
+		
+		/**
+		 * Do a search query for journeys.
+		 */
+		@Override
+		public void run() {
+			// Create a list for holding Stations. 
+			ArrayList<Station> searchStations = new ArrayList<Station>();
+
+			// Find station numbers.
+			String fromNbr = txtJourneyFrom.getText().trim();	// 80000 (Malmö C)
+			String toNbr = txtJourneyTo.getText().trim();		// 81216 (Lund C)
+
+			/*// Search for all stations that contains the value of txtSearch and add the to the list searchStations.
+			searchStations.addAll(Parser.getStationsFromURL(txtJourneyFrom.getText().trim()));
+			for (Station s: searchStations){
+				// Find station number.
+			}*/
+
+			// Construct the query URL for searching.
+			String searchURL = Constants.getURL(fromNbr, toNbr, 1);
+
+			// Call the Skanetrafiken API with the constructed query URL to retrieve a list of available journeys.
+			Journeys journeys = Parser.getJourneys(searchURL);
+			ArrayList<Journey> journeyList = journeys.getJourneys();
+
+			// Clear result.
+			txtJourneyResult.setText("");
+
+			if(!journeyList.isEmpty()) {
+				// Get fist journey and print out info about it.
+				Journey journey = journeyList.get(0);
+				txtJourneyResult.append("Resa:\n");
+				txtJourneyResult.append("------------------\n");
+				txtJourneyResult.append("Avgår kl. " + getCalenderAsHHmm(journey.getDepDateTime()));
+				// If there's a deviation, display it too.
+				try {
+					int depTimeDeviation = Integer.parseInt(journey.getDepTimeDeviation());
+					if(depTimeDeviation != 0) {
+						txtJourneyResult.append(" (avvikelse med " + Integer.toString(depTimeDeviation) + " minuter från ordinarie tid)");
+					}
+				} catch(Exception ex) {
+					// Do nothing on error.
+				}
+				txtJourneyResult.append(" från " + journey.getStartStation().getStationName() +  "\n");
+				txtJourneyResult.append("Ankommer kl. " + getCalenderAsHHmm(journey.getArrDateTime()));
+				// If there's a deviation, display it too.
+				try {
+					int arrTimeDeviation = Integer.parseInt(journey.getArrTimeDeviation());
+					if(arrTimeDeviation != 0) {
+						txtJourneyResult.append(" (avvikelse med " + Integer.toString(arrTimeDeviation) + " minuter från ordinarie tid)");
+					}
+				} catch(Exception ex) {
+					// Do nothing on error.
+				}
+				txtJourneyResult.append(" till " + journey.getEndStation().getStationName() +  "\n");
+				txtJourneyResult.append("Restid: " + journey.getTravelMinutes() + " minuter\n");
+				txtJourneyResult.append("Avgår om : " + journey.getTimeToDeparture() + " minuter\n");
+				txtJourneyResult.append("Antal byten: " + journey.getNoOfChanges() + "\n");
+				txtJourneyResult.append("Antal byten: " + journey.getNoOfChanges() + "\n");
+				txtJourneyResult.append("Antal zoner: " + journey.getNoOfZones() +  "\n");
+			} else {
+				txtJourneyResult.append("Ingen resa funnen.\n");
+			}
+		}
+	} 
+
+	/**
+	 * Handles the search query for stations. 
+	 */
+	private class GetStationsThread extends Thread {
+		
+		/**
+		 * Do a search query for journeys.
+		 */
+		@Override
+		public void run() {
+		   	// Create a list for holding Stations. 
+			ArrayList<Station> searchStations = new ArrayList<Station>();
+			
+			// Search for all stations that contains the value of txtSearch and add the to the list searchStations.
+			searchStations.addAll(Parser.getStationsFromURL(txtSearch.getText().trim()));
+
+			// Clear result.
+			txtResult.setText("");
+
+			for (Station s: searchStations){
+				txtResult.append(s.getStationName() +" number:" + s.getStationNbr() + 
+					" longitude: " + s.getLongitude() + " latitude: " + s.getLatitude() + "\n");
+			}
+		}
+	} 
 }
