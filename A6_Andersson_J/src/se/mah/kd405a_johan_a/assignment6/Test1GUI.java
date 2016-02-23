@@ -171,6 +171,32 @@ public class Test1GUI extends JFrame {
 
 				// Call the Skanetrafiken API with the constructed query URL to retrieve a list of available journeys.
 				Journeys journeys = Parser.getJourneys(searchURL);
+				ArrayList<Journey> journeyList = journeys.getJourneys();
+				if(!journeyList.isEmpty()) {
+					// Get fist journey and print out info about it.
+					Journey journey = journeyList.get(0);
+					txtJourneyResult.append("Resa:\n");
+					txtJourneyResult.append("------------------\n");
+					txtJourneyResult.append("Avgår kl. " + journey.getDepDateTime());
+					if(!journey.getArrTimeDeviation().isEmpty()) {
+						// If there's a deviation, display it too.
+						txtJourneyResult.append("(ny tid: " + journey.getDepTimeDeviation() + ")");
+					}
+					txtJourneyResult.append(" från " + journey.getStartStation() +  "\n");
+					txtJourneyResult.append("Ankommer kl. " + journey.getArrDateTime());
+					if(!journey.getArrTimeDeviation().isEmpty()) {
+						// If there's a deviation, display it too.
+						txtJourneyResult.append("(ny tid: " + journey.getArrTimeDeviation() + ")");
+					}
+					txtJourneyResult.append(" till " + journey.getEndStation() +  "\n");
+					txtJourneyResult.append("Restid: " + journey.getTravelMinutes() + "\n");
+					txtJourneyResult.append("Avgår om : " + journey.getTimeToDeparture() + " minuter(?)\n");
+					txtJourneyResult.append("Antal byten: " + journey.getNoOfChanges() + "\n");
+					txtJourneyResult.append("Antal byten: " + journey.getNoOfChanges() + "\n");
+					txtJourneyResult.append("Antal zoner: " + journey.getNoOfZones() +  "\n");
+				} else {
+					txtJourneyResult.append("Ingen resa funnen.\n");
+				}
 				for (Journey journey : journeys.getJourneys()) {
 					txtJourneyResult.append(journey.getStartStation().toString() + " - ");
 					txtJourneyResult.append(journey.getEndStation().toString());
