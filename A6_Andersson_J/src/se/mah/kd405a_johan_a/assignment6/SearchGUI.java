@@ -33,7 +33,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import net.miginfocom.swing.MigLayout;
 
-public class Test1GUI extends JFrame {
+public class SearchGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtSearch;
@@ -61,7 +61,7 @@ public class Test1GUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Test1GUI frame = new Test1GUI();
+					SearchGUI frame = new SearchGUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,7 +73,8 @@ public class Test1GUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Test1GUI() {
+	public SearchGUI() {
+		setTitle("Skanetrafiken SearchApp");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -100,7 +101,7 @@ public class Test1GUI extends JFrame {
 		JButton btnSearch = new JButton("Sök");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Tell the user we're searching.
+				// Notify the user that we're searching.
 				txtResult.setText("Söker...");
 				
 				// Start search query thread.
@@ -150,7 +151,7 @@ public class Test1GUI extends JFrame {
 		btnJourneySearch = new JButton("Sök");
 		btnJourneySearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Tell the user we're searching.
+				// Notify the user that we're searching.
 				txtJourneyResult.setText("Söker...");
 				
 				// Start search query thread.
@@ -196,12 +197,6 @@ public class Test1GUI extends JFrame {
 			String fromNbr = txtJourneyFrom.getText().trim();	// 80000 (Malmö C)
 			String toNbr = txtJourneyTo.getText().trim();		// 81216 (Lund C)
 
-			/*// Search for all stations that contains the value of txtSearch and add the to the list searchStations.
-			searchStations.addAll(Parser.getStationsFromURL(txtJourneyFrom.getText().trim()));
-			for (Station s: searchStations){
-				// Find station number.
-			}*/
-
 			// Construct the query URL for searching.
 			String searchURL = Constants.getURL(fromNbr, toNbr, 1);
 
@@ -209,9 +204,10 @@ public class Test1GUI extends JFrame {
 			Journeys journeys = Parser.getJourneys(searchURL);
 			ArrayList<Journey> journeyList = journeys.getJourneys();
 
-			// Clear result.
+			// Clear result textarea.
 			txtJourneyResult.setText("");
 
+			// Display search result.
 			if(!journeyList.isEmpty()) {
 				// Get fist journey and print out info about it.
 				Journey journey = journeyList.get(0);
@@ -256,7 +252,7 @@ public class Test1GUI extends JFrame {
 	private class GetStationsThread extends Thread {
 		
 		/**
-		 * Do a search query for journeys.
+		 * Do a search query for stations.
 		 */
 		@Override
 		public void run() {
@@ -266,9 +262,10 @@ public class Test1GUI extends JFrame {
 			// Search for all stations that contains the value of txtSearch and add the to the list searchStations.
 			searchStations.addAll(Parser.getStationsFromURL(txtSearch.getText().trim()));
 
-			// Clear result.
+			// Clear result textarea.
 			txtResult.setText("");
 
+			// Display search result.
 			for (Station s: searchStations){
 				txtResult.append(s.getStationName() +" number:" + s.getStationNbr() + 
 					" longitude: " + s.getLongitude() + " latitude: " + s.getLatitude() + "\n");
