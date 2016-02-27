@@ -1,20 +1,16 @@
 package se.mah.kd405a_johan_a;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
 import javax.swing.JMenuItem;
 import javax.swing.BoxLayout;
-import javax.swing.JList;
 import javax.swing.JSplitPane;
-import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,17 +24,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.util.List;
-import java.util.Vector;
-import java.awt.FlowLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
 import javax.swing.JTextArea;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.SystemColor;
 

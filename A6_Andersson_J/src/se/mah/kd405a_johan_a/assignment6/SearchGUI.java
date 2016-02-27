@@ -17,20 +17,13 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JTabbedPane;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import net.miginfocom.swing.MigLayout;
 
 public class SearchGUI extends JFrame {
@@ -190,9 +183,6 @@ public class SearchGUI extends JFrame {
 		 */
 		@Override
 		public void run() {
-			// Create a list for holding Stations. 
-			ArrayList<Station> searchStations = new ArrayList<Station>();
-
 			// Find station numbers.
 			String fromNbr = txtJourneyFrom.getText().trim();	// 80000 (Malmö C)
 			String toNbr = txtJourneyTo.getText().trim();		// 81216 (Lund C)

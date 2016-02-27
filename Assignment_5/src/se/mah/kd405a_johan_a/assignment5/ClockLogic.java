@@ -2,7 +2,6 @@ package se.mah.kd405a_johan_a.assignment5;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ClockLogic {
 	

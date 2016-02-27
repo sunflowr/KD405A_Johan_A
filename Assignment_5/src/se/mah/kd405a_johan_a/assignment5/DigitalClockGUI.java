@@ -8,9 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.Toolkit;
 
 import javax.swing.JTextField;
@@ -18,7 +15,6 @@ import javax.swing.JButton;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
