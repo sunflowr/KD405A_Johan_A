@@ -23,17 +23,17 @@ import java.awt.event.ActionEvent;
 public class MainGUI extends JFrame {
 
 	private JPanel contentPane;
-	
+
+	// Local debug view.
 	private PaintPanel pnlDebugView;
-
-	private static final boolean isTesting = false; // Set to true when testing to skip connecting to screen.
-
-	private PixelController	pixelController;
-	private int width;
-	private int height;
+	
+	// Status label.
 	private JLabel lblStatus;
-	
-	
+
+	// Set to true when testing to skip connecting to screen.
+	private static final boolean isTesting = false;
+
+
 	/**
 	 * Launch the application.
 	 */
@@ -102,6 +102,9 @@ public class MainGUI extends JFrame {
 	private class ScreenThread extends Thread {
 		
 		PixelController.Screen screen;
+		private PixelController	pixelController;
+		private int width;
+		private int height;
 		
 		/**
 		 * Constructor.
@@ -116,6 +119,7 @@ public class MainGUI extends JFrame {
 		 */
 		@Override
 		public void run() {
+			// Connect.
 			if(!isTesting) {
 				// Connect to selected screen.
 				pixelController = PixelController.getInstance(screen);
@@ -139,30 +143,37 @@ public class MainGUI extends JFrame {
 			// Resize debug view.
 			pnlDebugView.setSize(width, height);
 
-			int ss = 0;
+			int animationCounter = 0;
 			while(true) {
-				// Test draw.
+				// Draw a animated XOR-pattern.
 				for(int y = 0; y < height; y++) {
 					for(int x = 0; x < width; x++) {
-						int r = (int)((((Math.cos((ss / 255.0f) * (Math.PI * 2.0f)) + 1.0f) * 0.5f) * 255.0f) + (x % 255)) / 2;
-						int b = (int)((((Math.sin((ss / 255.0f) * (Math.PI * 2.0f)) + 1.0f) * 0.5f) * 255.0f) + (y % 255)) / 2;
+						// Make the pattern move in circle.
+						int r = (int)((((Math.cos((animationCounter / 255.0f) * (Math.PI * 2.0f)) + 1.0f) * 0.5f) * 255.0f) + (x % 255)) / 2;
+						int b = (int)((((Math.sin((animationCounter / 255.0f) * (Math.PI * 2.0f)) + 1.0f) * 0.5f) * 255.0f) + (y % 255)) / 2;
+						
+						// XOR-pattern.
 						int g = (r ^ b);
+						
+						// Set pixel.
 						setPixel(x, y, new Color(r, g, b));
 					}
 				}
 				
+				// Draw a animated sine-curve.
 				float offset = height / 2.0f;
 				float amplitude = height / 4.0f;
 				for(int x = 0; x < width; x++) {
-					double y = (Math.sin(((((float)x / width) + ((float)ss / 255.0f)) * (Math.PI  * 2.0f))) * amplitude) + offset; 
+					double y = (Math.sin(((((float)x / width) + ((float)animationCounter / 255.0f)) * (Math.PI  * 2.0f))) * amplitude) + offset; 
 					setPixel(x, (int)y, new Color(0, 0, 0));
 					setPixel(x, (int)y - 1, new Color(0, 0, 0));
 					setPixel(x, (int)y + 1, new Color(0, 0, 0));
 				}
 				
-				ss++;
-				if(ss > 255) {
-					ss = 0;
+				// Update animation counter.
+				animationCounter++;
+				if(animationCounter > 255) {
+					animationCounter = 0;
 				}
 
 				// Redraw debug view.
@@ -198,7 +209,8 @@ public class MainGUI extends JFrame {
 	 */
 	private class PaintPanel extends JPanel {
 		
-		BufferedImage image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+		// Used by debug view to display to draw graphic.
+		private BufferedImage image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
 		
 		/**
 		 * Updates the size of the debug view.
@@ -232,17 +244,6 @@ public class MainGUI extends JFrame {
 			// Test draw.
 			Graphics2D gfx2d = (Graphics2D)gfx;
 			gfx2d.drawImage(image, 0, 0, this);
-			/*width = getWidth();
-			height = getHeight();
-			for(int y = 0; y < height; y++) {
-				for(int x = 0; x < width; x++) {
-					int r = x % 255;
-					int b = y % 255;
-					int g = r ^ b;
-					gfx2d.setColor(new Color(r, g, b));
-					gfx2d.drawLine(x, y, x, y);
-				}
-			}*/
 		}
 	} 
 }
