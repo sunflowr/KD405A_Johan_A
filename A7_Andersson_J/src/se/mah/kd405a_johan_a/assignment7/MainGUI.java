@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.awt.event.ActionEvent;
 
 public class MainGUI extends JFrame {
@@ -145,11 +144,20 @@ public class MainGUI extends JFrame {
 				// Test draw.
 				for(int y = 0; y < height; y++) {
 					for(int x = 0; x < width; x++) {
-						int r = x % 255;
-						int b = y % 255;
-						int g = (x ^ y) ^ ss;
+						int r = (int)((((Math.cos((ss / 255.0f) * (Math.PI * 2.0f)) + 1.0f) * 0.5f) * 255.0f) + (x % 255)) / 2;
+						int b = (int)((((Math.sin((ss / 255.0f) * (Math.PI * 2.0f)) + 1.0f) * 0.5f) * 255.0f) + (y % 255)) / 2;
+						int g = (r ^ b);
 						setPixel(x, y, new Color(r, g, b));
 					}
+				}
+				
+				float offset = height / 2.0f;
+				float amplitude = height / 4.0f;
+				for(int x = 0; x < width; x++) {
+					double y = (Math.sin(((((float)x / width) + ((float)ss / 255.0f)) * (Math.PI  * 2.0f))) * amplitude) + offset; 
+					setPixel(x, (int)y, new Color(0, 0, 0));
+					setPixel(x, (int)y - 1, new Color(0, 0, 0));
+					setPixel(x, (int)y + 1, new Color(0, 0, 0));
 				}
 				
 				ss++;
